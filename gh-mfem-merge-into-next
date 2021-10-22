@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -e
+
+if [ -z "$1" ]; then
+   echo "USAGE: gh mfem-merge-into-next <pr-number>"
+   exit 1
+fi
+
+
+if [ -n "$(git status --porcelain)" ]; then
+   echo "Must merge with clean working directory"
+   exigt 1
+fi
+
+git checkout next
+git pull
+
+pr_branch=$(gh pr view $1 --json headRefName --jq '.headRefName')
+commit_msg="Merge branch '$pr_branch' into next (PR #$1)"
+
+git merge origin/$pr_branch -m "$commit_msg"
+
+echo
+echo -e "\033[0;32mMerged PR #$1 [$pr_branch] into next with commit message:\033[0m"
+echo
+echo "    $commit_msg"
+echo
+echo -e "\033[0;34mRun 'git push' to push the merge to GitHub.\033[0m"
