@@ -15,13 +15,24 @@ fi
 git checkout next
 git pull
 
+pr_owner=$(gh pr view $1 --json headRepositoryOwner --jq ".headRepositoryOwner.login")
 pr_branch=$(gh pr view $1 --json headRefName --jq '.headRefName')
-commit_msg="Merge branch '$pr_branch' into next (PR #$1)"
 
-git merge origin/$pr_branch -m "$commit_msg"
+if [ "$pr_owner" == "mfem" ]; then
+   pr_from="$pr_branch"
+else
+   pr_from="$pr_owner:$pr_branch"
+fi
+
+commit_msg="Merge branch '$pr_from' into next (PR #$1)"
+
+tmp_branch=gh/pr/$1
+git fetch origin pull/$1/head:$tmp_branch
+git merge $tmp_branch -m "$commit_msg"
+git branch -D $tmp_branch
 
 echo
-echo -e "\033[0;32mMerged PR #$1 [$pr_branch] into next with commit message:\033[0m"
+echo -e "\033[0;32mMerged PR #$1 [$pr_from] into next with commit message:\033[0m"
 echo
 echo "    $commit_msg"
 echo
