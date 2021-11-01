@@ -31,7 +31,7 @@ git fetch origin pull/$1/head:$tmp_branch
 git merge $tmp_branch -m "$commit_msg"
 git branch -D $tmp_branch
 
-if git diff --exit-code origin/next; then
+if git diff --exit-code origin/next > /dev/null 2>&1; then
    echo
    echo -e "\033[1;33mNo chages made. Has PR #$1 already been merged into next?\033[0m"
    echo
