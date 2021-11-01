@@ -31,9 +31,15 @@ git fetch origin pull/$1/head:$tmp_branch
 git merge $tmp_branch -m "$commit_msg"
 git branch -D $tmp_branch
 
-echo
-echo -e "\033[0;32mMerged PR #$1 [$pr_from] into next with commit message:\033[0m"
-echo
-echo "    $commit_msg"
-echo
-echo -e "\033[0;34mRun 'git push' to push the merge to GitHub.\033[0m"
+if git diff --exit-code origin/next; then
+   echo
+   echo -e "\033[1;33mNo chages made. Has PR #$1 already been merged into next?\033[0m"
+   echo
+else
+   echo
+   echo -e "\033[0;32mMerged PR #$1 [$pr_from] into next with commit message:\033[0m"
+   echo
+   echo "    $commit_msg"
+   echo
+   echo -e "\033[0;34mRun 'git push' to push the merge to GitHub.\033[0m"
+fi
