@@ -35,7 +35,17 @@ commit_msg="Merge branch '$pr_from' into next (PR #$1)"
 # Check out the latest commit from the PR into a temporary branch, merge into
 # next, and then delete the temporary branch.
 tmp_branch=gh/pr/$1
+
+repo_root=$(git rev-parse --show-toplevel)
+
 git fetch origin pull/$1/head:$tmp_branch
+if $repo_root/tests/scripts/branch-history -b $tmp_branch $repo_root; then
+   echo -e "\033[1;32mBranch history check succcessful.\033[0m"
+else
+   echo -e "\033[1;31mBranch history check failed.\033[0m"
+   git branch -D $tmp_branch
+   exit 1
+fi
 merge_result=$(git merge $tmp_branch -m "$commit_msg")
 git branch -D $tmp_branch
 
