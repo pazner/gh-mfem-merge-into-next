@@ -40,7 +40,7 @@ repo_root=$(git rev-parse --show-toplevel)
 
 git fetch origin pull/$1/head:$tmp_branch
 if $repo_root/tests/scripts/branch-history -b $tmp_branch $repo_root; then
-   echo -e "\033[1;32mBranch history check succcessful.\033[0m"
+   echo -e "\033[0;32mBranch history check succcessful.\033[0m"
 else
    echo -e "\033[1;31mBranch history check failed.\033[0m"
    git branch -D $tmp_branch
