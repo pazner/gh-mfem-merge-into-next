@@ -1,6 +1,6 @@
 Install by running
 ```
-gh extension install pazner/gh-mfem-merge-into-next.
+gh extension install pazner/gh-mfem-merge-into-next
 ```
 
 (You can also install by closing the repository and running `gh extension install .` from within the repository directory.)
