@@ -43,8 +43,12 @@ if $repo_root/tests/scripts/branch-history -b $tmp_branch $repo_root; then
    echo -e "\033[0;32mBranch history check succcessful.\033[0m"
 else
    echo -e "\033[1;31mBranch history check failed.\033[0m"
-   git branch -D $tmp_branch
-   exit 1
+
+   read -p "Do you want to continue with the merge anyway? [yN] " yn
+   case $yn in
+        [Yy]* ) ;;
+        * ) git branch -D $tmp_branch; exit 1;;
+   esac
 fi
 merge_result=$(git merge $tmp_branch -m "$commit_msg")
 git branch -D $tmp_branch
