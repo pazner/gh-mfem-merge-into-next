@@ -50,8 +50,18 @@ else
         * ) git branch -D $tmp_branch; exit 1;;
    esac
 fi
+
+set +e
 merge_result=$(git merge $tmp_branch -m "$commit_msg")
+merge_exit_code=$?
+set -e
+
 git branch -D $tmp_branch
+
+if [ $merge_exit_code -ne 0 ]; then
+   echo -e "\033[1;31mMerging failed. Please check for conflicts.\033[0m"
+   exit 1
+fi
 
 # If the merge was a no-op, let the user know. This probably means the PR was
 # already merged into next.
