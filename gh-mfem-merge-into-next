@@ -52,7 +52,7 @@ else
 fi
 
 set +e
-merge_result=$(git merge $tmp_branch -m "$commit_msg")
+merge_result=$(git merge --no-ff $tmp_branch -m "$commit_msg")
 merge_exit_code=$?
 set -e
 
