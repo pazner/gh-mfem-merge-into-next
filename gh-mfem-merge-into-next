@@ -15,7 +15,7 @@ fi
 
 # Check out next and get latest updates from origin
 git fetch
-git checkout -B next
+git checkout -B next origin/next
 
 # Get the owner and branch name of the PR. If the PR is from a fork, the owner
 # is the name of whoever forked the repo. Otherwise, the owner is "mfem"
