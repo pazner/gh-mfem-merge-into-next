@@ -19,8 +19,12 @@ git checkout -B next origin/next
 
 # Get the owner and branch name of the PR. If the PR is from a fork, the owner
 # is the name of whoever forked the repo. Otherwise, the owner is "mfem"
-pr_owner=$(gh pr view $1 --json headRepositoryOwner --jq ".headRepositoryOwner.login")
-pr_branch=$(gh pr view $1 --json headRefName --jq '.headRefName')
+pr_info=($(gh pr view $1 --json headRepositoryOwner,headRefName --jq ".headRepositoryOwner.login, .headRefName"))
+# Note: pr_info is an array (the output of gh with --jq is newline-separated
+# text, and the expression is enclosed in parantheses). Extract the components
+# by subscripting.
+pr_owner=${pr_info[0]}
+pr_branch=${pr_info[1]}
 
 # For forks, use the format "owner:branch". If it's not a fork, use "branch".
 if [ "$pr_owner" == "mfem" ]; then
